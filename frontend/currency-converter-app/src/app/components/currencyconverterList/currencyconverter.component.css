@@ -1,0 +1,8 @@
+.example-card {
+    max-width: 650px;
+  }
+  .error-snackbar {
+    position: absolute;
+    bottom: 65px;
+  }
+

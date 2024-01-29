@@ -1,0 +1,58 @@
+
+<!-- <mat-card *ngIf="error" align="center"><mat-error>{{error}}</mat-error></mat-card> -->
+<mat-card></mat-card>
+<mat-card class="example-card">
+ <mat-card-header>
+      <div mat-card-avatar class="example-header-image"></div>
+      <mat-card-title>Currency Converter App</mat-card-title>
+      </mat-card-header>
+    <mat-card-content>
+    <form [formGroup]="form" (submit)="convertCurrency()">
+      <div>
+        <mat-form-field>
+          <mat-label>Select</mat-label>
+          <mat-select  formControlName="sourceCurrency">
+            <ng-container *ngFor="let currency of currencyList ">
+              <mat-option  [value]="currency.currencyIdentifier">
+                {{currency.currencyIdentifier}}
+              </mat-option>
+            </ng-container>
+          </mat-select>
+          <mat-error *ngIf="form.get('sourceCurrency')?.invalid">Select the Cource Currency</mat-error>
+          <mat-hint align="end">Here's the dropdown arrow ^</mat-hint>
+        </mat-form-field>&nbsp;&nbsp;
+        <mat-form-field >
+          <mat-label>Enter the amount</mat-label>
+          <input formControlName="enteredAmountValue" matInput #input maxlength="10"  type="number" placeholder="Ex. 10">
+          <mat-error *ngIf="form.get('enteredAmountValue')?.invalid">Please enter the amount</mat-error>
+        </mat-form-field>
+      </div>
+      <div>
+        <mat-form-field>
+          <mat-label>Select</mat-label>
+          <mat-select formControlName="targetCurrency">
+            <ng-container *ngFor="let currency of currencyList ">
+              <mat-option  [value]="currency.currencyIdentifier">
+                {{currency.currencyIdentifier}}
+              </mat-option>
+            </ng-container>
+           </mat-select>
+          <mat-error *ngIf="form.get('targetCurrency')?.invalid">Please enter the amount</mat-error>
+          <mat-hint align="end">Here's the dropdown arrow ^</mat-hint>
+        </mat-form-field>&nbsp;&nbsp;
+        <mat-form-field hintLabel="Converted Amount">
+          <mat-label>Value Auto Populate</mat-label>
+          <input formControlName="convertedAmount" matInput  type="number">
+        </mat-form-field>
+      </div>
+      &nbsp;&nbsp;&nbsp;
+      <mat-card-actions align="end">
+        <button mat-raised-button (click)=reset() color="accent">Clear</button> &nbsp;&nbsp;&nbsp;
+        <button mat-raised-button color="primary" type="submit">Convert</button>
+      </mat-card-actions>
+    </form>
+    </mat-card-content>
+   
+  </mat-card>
+
+  
