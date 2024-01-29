@@ -3,6 +3,7 @@ package com.springboot.react.CurrencyConversion.controllers;
 
 import com.springboot.react.CurrencyConversion.domin.ConvertCurrency;
 import com.springboot.react.CurrencyConversion.services.ConvertCurrencyService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +20,7 @@ public class CurrencyConversionController {
     ConvertCurrencyService currencyConvertionService;
 
     @PostMapping("/converter")
-    public ResponseEntity<Double> convertCurrency(@RequestBody ConvertCurrency covertCurrecny){
+    public ResponseEntity<Double> convertCurrency(@Valid @RequestBody ConvertCurrency covertCurrecny){
         Optional<Double> result = this.currencyConvertionService.currencyConversion(covertCurrecny);
 
         if(result.isPresent()){

@@ -29,7 +29,7 @@ public class FetchAllCurrencyServiceTest {
         when(currrencyConversionRepository.findAll()).thenReturn(Arrays.asList(new Currency(1L,"USD",10.0),
                 new Currency(3L,"INR",20.0)));
         List<Currency> currency = retriveAllCurrency.getAllCurrency();
-        assertEquals(10.0,currency.get(0).getAmount());
-        assertEquals(20.0,currency.get(1).getAmount());
+        assertEquals(10.0,currency.get(0).getRate());
+        assertEquals(20.0,currency.get(1).getRate());
     }
 }

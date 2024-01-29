@@ -40,7 +40,7 @@ public class PostCurrecnyControllerTest {
                         .content(asJsonString(currency))
                         .accept(MediaType.APPLICATION_JSON))
                         .andDo(MockMvcResultHandlers.print())
-                        .andExpect(content().json("{id:1,currencyIdentifier:USD,amount:10.0}"))
+                        .andExpect(content().json("{id:1,currencyIdentifier:USD,rate:10.0}"))
                         .andExpect(status().isCreated()).andReturn();
     }
 

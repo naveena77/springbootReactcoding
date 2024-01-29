@@ -23,28 +23,36 @@ public class ConvertCurrencyService {
 
          Double fromValue=0.00;
          Double toValue=0.00;
-         if(fromSourceCurrency.getId()!=null){
-             fromValue=fromSourceCurrency.getAmount();
-             System.out.println("from"+fromSourceCurrency.getAmount());
-         }
-         System.out.println("from outside"+fromValue);
 
-         if((fromSourceCurrency.getId()!=null)){
-             toValue=toTargetCurrency.getAmount();
-             System.out.println("to"+toTargetCurrency.getAmount());
+         if(fromSourceCurrency.getId()!=null){
+             fromValue=fromSourceCurrency.getRate();
          }
-         System.out.println("to outside"+toValue);
+
+         if((toTargetCurrency.getId()!=null)){
+             toValue=toTargetCurrency.getRate();
+         }
 
          if(toTargetCurrency != null && fromSourceCurrency != null){
-
-             if(convertCurrency.getValue() < 0){
+             if(convertCurrency.getEnteredAmountValue() < 1){
                  return Optional.empty();
              }
-             Double result = toValue * convertCurrency.getValue() / fromValue;
-             System.out.println("result is :"+  result);
+             System.out.println("inside if from"+fromValue);
+             System.out.println("inside if to"+toValue);
+             System.out.println("inside if user entered value"+convertCurrency.getEnteredAmountValue());
+             Double result = toValue * convertCurrency.getEnteredAmountValue() / fromValue;
              System.out.println("converted amount is :"+result);
-
-             return Optional.of(result);
+             System.out.println("toTargetCurrency.getCurrencyIdentifier() :"+toTargetCurrency.getCurrencyIdentifier());
+             
+             if(toTargetCurrency.getCurrencyIdentifier().equals("JPY")){
+                 int jpyValue = 0;
+                 jpyValue = (int)Math.round(result);
+                 System.out.println("JPY amount is :"+jpyValue);
+                 return Optional.of(Double.valueOf(jpyValue));
+             } else{
+                 double roundOff = Math.round(result * 100.0) / 100.0;
+                 System.out.println("JPY amount is :"+roundOff);
+                 return Optional.of(roundOff);
+             }
          }
 
          return Optional.empty();

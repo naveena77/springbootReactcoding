@@ -24,6 +24,7 @@ public class CurrencyConversionServiceTest {
     @InjectMocks
     private ConvertCurrencyService convertCurrencyService;
 
+
     @Test
     public void convertShouldReturnEmptyWhenNegativeValue(){
         Currency currencyEUR = new Currency(1L,"EUR",1);
@@ -40,17 +41,34 @@ public class CurrencyConversionServiceTest {
     }
 
     @Test
-    public void convertShouldReturnValue(){
+    public void convertShouldReturnValueInTwoDecimal(){
         Currency currencyEUR = new Currency(1L,"EUR",1);
-        Currency currencyUSD = new Currency(2L,"USD",1.15795);
+        Currency currencyUSD = new Currency(2L,"USD",1.086361);
 
         Mockito.when(repository.currencyIdentifier("EUR")).thenReturn(currencyEUR);
         Mockito.when(repository.currencyIdentifier("USD")).thenReturn(currencyUSD);
 
         ConvertCurrency convertCurrency = new ConvertCurrency("EUR","USD",10);
         Optional<Double> result = this.convertCurrencyService.currencyConversion(convertCurrency);
-        double excepted = Math.round(11.5795 * 100.0)/100.0;
-        double actual = Math.round(result.get() * 100.0) /100.0;
+        double excepted = 10.86;
+        double actual =result.get();
+        assertNotNull(result);
+        assertTrue(result.isPresent());
+        assertEquals(excepted,actual);
+    }
+
+    @Test
+    public void convertShouldReturnValueInZeroDecimal(){
+        Currency currencyEUR = new Currency(1L,"USD",1.086361);
+        Currency currencyUSD = new Currency(2L,"JPY",160.982486);
+
+        Mockito.when(repository.currencyIdentifier("USD")).thenReturn(currencyEUR);
+        Mockito.when(repository.currencyIdentifier("JPY")).thenReturn(currencyUSD);
+
+        ConvertCurrency convertCurrency = new ConvertCurrency("USD","JPY",10);
+        Optional<Double> result = this.convertCurrencyService.currencyConversion(convertCurrency);
+        double excepted = 1482;
+        double actual =result.get();
         assertNotNull(result);
         assertTrue(result.isPresent());
         assertEquals(excepted,actual);

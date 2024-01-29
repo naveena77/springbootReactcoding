@@ -43,7 +43,7 @@ public class FetchControllerTest {
         MvcResult result = mockMvc.perform(request)
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(status().isOk())
-                .andExpect(content().json("[{id:1,currencyIdentifier:USD,amount:20.0},{id:2,currencyIdentifier:INR,amount:30.0}]"))
+                .andExpect(content().json("[{id:1,currencyIdentifier:USD,rate:20.0},{id:2,currencyIdentifier:INR,rate:30.0}]"))
                 .andReturn();
     }
 

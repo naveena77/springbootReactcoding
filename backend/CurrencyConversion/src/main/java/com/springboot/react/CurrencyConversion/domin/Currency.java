@@ -7,27 +7,30 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 @Entity
+@Table(name = "currency")
 public class Currency {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="id")
     private Long id;
 
     @NotBlank(message = "Source Currency is required")
     @Size(min=3,max=3,message = "Please use 3 characters")
-    @Column(updatable = false,unique = true)
+    @Column(name="currency_identifier",updatable = false,unique = true)
     private String currencyIdentifier;
-    @NotNull(message = "Amount is required")
-    private double amount;
+    @NotNull(message = "rate is required")
+    @Column(name="rate")
+    private double rate;
 
     public Currency(){
     }
 
 
-    public Currency(Long id, String currencyIdentifier, double amount) {
+    public Currency(Long id, String currencyIdentifier, double rate) {
         this.id = id;
         this.currencyIdentifier = currencyIdentifier;
-        this.amount = amount;
+        this.rate = rate;
     }
 
     public Long getId() {
@@ -46,20 +49,12 @@ public class Currency {
         this.currencyIdentifier = currencyIdentifier;
     }
 
-    public double getAmount() {
-        return amount;
+    public double getRate() {
+        return rate;
     }
 
-    public void setAmount(double amount) {
-        this.amount = amount;
+    public void setRate(double rate) {
+        this.rate = rate;
     }
-
-    @Override
-    public String toString() {
-        return "Currency{" +
-                "id=" + id +
-                ", currencyIdentifier='" + currencyIdentifier + '\'' +
-                ", amount=" + amount +
-                '}';
-    }
+    
 }

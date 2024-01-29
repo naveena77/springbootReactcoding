@@ -7,7 +7,8 @@ import MenuItem from "@mui/material/MenuItem";
 import { styled } from "@mui/material/styles";
 import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
-
+import { CurrencyConverterService } from "../../Services/CurrencyConverterService";
+import { getCurrencyLists } from "../../Services/CurrencyListsService";
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
   ...theme.typography.body2,
@@ -15,17 +16,27 @@ const Item = styled(Paper)(({ theme }) => ({
   textAlign: "center",
   color: theme.palette.text.secondary,
 }));
-export const ApiPost = (props) => {
-  const { currency } = props;
+export const CurrencyConverterComponent = () => {
   const [targetCurrencyInput, setTargetCurrencyInput] = useState("");
+  const [currency, setCurrency] = useState([]);
   const [error, setError] = useState("");
   const [formData, setFormData] = useState({
-    sourceCurrency: "",
-    targetCurrency: "",
+    sourceCurrency: "EUR",
+    targetCurrency: "USD",
     sourceCurrencyInput: "",
     errors: {},
   });
-  useEffect(() => {}, []);
+  useEffect(() => {
+    getCurrencyLists()
+      .then((res) => {
+        setCurrency(res);
+        console.log(res);
+      })
+      .catch((error) => {
+        setError(error.message);
+        console.log(error);
+      });
+  }, []);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -35,8 +46,8 @@ export const ApiPost = (props) => {
   const handleClear = (event) => {
     setTargetCurrencyInput("");
     setFormData({
-      sourceCurrency: "",
-      targetCurrency: "",
+      sourceCurrency: "EUR",
+      targetCurrency: "USD",
       sourceCurrencyInput: "",
       errors: {},
     });
@@ -74,48 +85,34 @@ export const ApiPost = (props) => {
       const currencyPost = {
         sourceCurrency: formData.sourceCurrency,
         targetCurrency: formData.targetCurrency,
-        value: formData.sourceCurrencyInput,
+        enteredAmountValue: formData.sourceCurrencyInput,
       };
       console.log(currencyPost);
-      const url = "http://localhost:8080/api/currency/converter";
-
-      postCurrency(url, currencyPost);
+      CurrencyConverterService.currencyConverter(currencyPost)
+        .then((res) => {
+          if (res.ok) {
+            return res.json();
+          } else {
+            throw new Error("Bad Http Request");
+          }
+        })
+        .then((data) => {
+          setTargetCurrencyInput(data);
+          console.log(data);
+        })
+        .catch((error) => {
+          alert(error);
+          console.log("ERROR", error);
+        });
     } else {
       return "error";
     }
   }
 
-  function postCurrency(url, currencyPost) {
-    fetch(url, {
-      method: "post",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-
-      //make sure to serialize your JSON body
-      body: JSON.stringify(currencyPost),
-    })
-      .then((res) => {
-        if (res.ok) {
-          return res.json();
-        } else {
-          throw new Error("Bad Http Request");
-        }
-      })
-      .then((data) => {
-        setTargetCurrencyInput(data);
-        console.log(data);
-      })
-      .catch((error) => {
-        alert(error);
-        console.log("ERROR", error);
-      });
-  }
-
   return (
     <div>
-      {" "}
+      <h1>Currency Converter</h1>
+      <br />
       <Box
         sx={{ flexGrow: 1 }}
         component="form"
@@ -127,16 +124,15 @@ export const ApiPost = (props) => {
           <Grid item xs={1}></Grid>
           <Grid item xs={10}>
             <Item>
+              {error && <h3 style={{ color: "red" }}>{error}</h3>}
               <div>
-                <InputLabel id="demo-simple-select-label"></InputLabel>
-
                 <Select
                   required
                   labelId="demo-simple-select-label"
                   id="demo-simple-select"
                   name="sourceCurrency"
                   value={formData.sourceCurrency}
-                  label="Select Source Currency"
+                  label="Select"
                   onChange={handleChange}
                 >
                   {currency.map((value, index) => {
@@ -153,13 +149,13 @@ export const ApiPost = (props) => {
                   id="outlined-required"
                   name="sourceCurrencyInput"
                   type="number"
-                  label="Enter Source Currency Input"
+                  label="Enter Source Amount"
                   value={formData.sourceCurrencyInput}
                   onChange={handleChange}
                 />
 
                 <InputLabel id="demo-simple-select-label">
-                  <div>==</div>
+                  <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
                 </InputLabel>
                 <Select
                   required
@@ -182,6 +178,7 @@ export const ApiPost = (props) => {
                 <TextField
                   id="outlined-required"
                   name="targetCurrencyInput"
+                  label="Value Populates"
                   value={targetCurrencyInput}
                 />
                 {formData.errors.sourceCurrency && (
@@ -208,9 +205,9 @@ export const ApiPost = (props) => {
                   >
                     clear
                   </Button>
-                  <span>==</span>
+                  <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
                   <Button variant="contained" color="primary" type="submit">
-                    Submit
+                    Convert
                   </Button>
                 </Box>
               </div>

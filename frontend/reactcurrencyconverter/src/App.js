@@ -1,11 +1,13 @@
 import React from "react";
 import "./App.css";
-import Landing from "./components/layout/Landing";
+import Header from "./components/layout/Header/Header";
+import { CurrencyConverterComponent } from "./components/CurrencyConverterComponent/CurrencyConverterComponent";
 
 export default function App() {
   return (
     <div className="App">
-      <Landing></Landing>
+      <Header />
+      <CurrencyConverterComponent />
     </div>
   );
 }

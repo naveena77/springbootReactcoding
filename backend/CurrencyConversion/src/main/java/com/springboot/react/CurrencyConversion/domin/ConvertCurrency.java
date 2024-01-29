@@ -1,18 +1,35 @@
 package com.springboot.react.CurrencyConversion.domin;
 
-public class ConvertCurrency {
-    private String sourceCurrency;
-    private String targetCurrency;
 
-    private double value;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
+@Entity
+@Table(name = "convert_currency")
+public class ConvertCurrency {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="id")
+    private Long id;
+
+    @Column(name="source_currency")
+    @NotBlank(message = "Source Currency is required")
+    private String sourceCurrency;
+    @NotBlank(message = "Target Currency is required")
+    private String targetCurrency;
+    @NotNull(message = "Amount value is required")
+    @Column(name="entered_amount_value")
+    private double enteredAmountValue;
 
     public ConvertCurrency(){
 
     }
-    public ConvertCurrency(String sourceCurrency, String targetCurrency, double value) {
+    public ConvertCurrency(String sourceCurrency, String targetCurrency, double enteredAmountValue) {
         this.sourceCurrency = sourceCurrency;
         this.targetCurrency = targetCurrency;
-        this.value = value;
+        this.enteredAmountValue = enteredAmountValue;
     }
 
     public String getSourceCurrency() {
@@ -31,11 +48,11 @@ public class ConvertCurrency {
         this.targetCurrency = targetCurrency;
     }
 
-    public double getValue() {
-        return value;
+    public double getEnteredAmountValue() {
+        return enteredAmountValue;
     }
 
-    public void setValue(double value) {
-        this.value = value;
+    public void setEnteredAmountValue(double enteredAmountValue) {
+        this.enteredAmountValue = enteredAmountValue;
     }
 }
